@@ -1,37 +1,47 @@
 <?php
 
-session_start(); // need this
+class User
+{
+    public $name;
+    public $email;
+    public $password;
 
-if (isset($_POST['submit'])) {
-    $name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_SPECIAL_CHARS);
+    public function __construct($constArgName, $constArgEmail, $constArgPass)
+    {
+        $this->name = $constArgName;
+        $this->email = $constArgEmail;
+        $this->password = $constArgPass;
+    }
 
-    $password = $_POST['password'];
+    public function setName($argName)
+    {
+        $this->name = $argName; // NOTE: that I am NOT using the $name in here, but just name
+    }
 
-    if ($name === 'Dimi' && $password === 'password') {
-        $_SESSION['name'] = $name;
-        header('Location: /php-crash-course/extras/dashboard.php');
-    } else {
-        echo 'wrong name and pass';
+    public function getName()
+    {
+        return $this->name;
     }
 }
 
+class User2 extends User
+{
+    public $title;
 
-?>
+    public function __construct($constArgName, $constArgEmail, $constArgPass, $constArgTitle)
+    {
+        parent::__construct($constArgName, $constArgEmail, $constArgPass);
+        $this->title = $constArgTitle;
+    }
 
+    public function getTitle()
+    {
+        return $this->title;
+    }
+}
 
-<!-- <a href="<?php $_SERVER['PHP_SELF'] ?>?name=Dmitri&age=30">Click</a> -->
+$user1 = new User('Dmitri', 'abc@mail.com', 12345);
 
+$user2 = new User2('MahMan', 'his@email.com', 1111, 'Manager');
 
-<form action="<?php htmlspecialchars($_SERVER['PHP_SELF']); ?>" method='POST'>
-    <div>
-        <label>Name: </label>
-        <input type="text" name="name">
-    </div>
-    <br>
-    <div>
-        <label>password: </label>
-        <input type="password" name="password">
-    </div>
-    <br>
-    <input type="submit" name="submit" value="Submit">
-</form>
+echo $user2->getTitle();
